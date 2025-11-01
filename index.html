@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mein sonnenschein</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Hintergrundherzen -->
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <div class="container">
+    <h1>hi baby 💜</h1>
+    <p class="intro">wann immer du an dir zweifeln solltest – komm zu dieser seite und erinnere dich daran, wie sehr du geliebt wirst.</p>
+
+    <!-- Tagesnachricht -->
+    <div id="dailyMessage" class="daily-message"></div>
+
+    <div class="buttons">
+      <button id="loveBtn">💌 warum ich dich liebe</button>
+      <button id="youBtn">🌸 was dich besonders macht</button>
+      <button id="hugBtn">🫂 virtuelle umarmung</button>
+    </div>
+
+    <div id="messageBox" class="message-box hidden"></div>
+  </div>
+
+  <script>
+    // 💬 Nachrichten
+   const messages = {
+  love: [
+    'weil du mein herz ruhiger und gleichzeitig schneller schlagen lässt. <br><br><video src="videos/koala.mp4" autoplay loop muted playsinline width="200" title="koala"</video>',
+    'weil du einfach du bist – liebevoll, lustig, süß und wunderschön. <br><br><video src="videos/snapchat.mp4" autoplay loop muted playsinline width="200" title="snapchat"</video>',
+    'weil kein tag ohne dich gleich hell wäre. <br><br><video src="videos/kuss.mp4" autoplay loop muted playsinline width="200" title="kuss"</video>',
+    'weil du mein herz immer wieder zum lachen bringst. <br><br><video src="videos/hallo.mp4" autoplay loop playsinline width="200" title="hallo"</video>',
+    'weil du mich inspirierst, jeden tag besser zu sein. <br><br><video src="videos/tiktok.mp4" autoplay loop playsinline width="200" title="tiktok"</video>'
+  ],
+  you: [
+    'du bist stärker, als du manchmal glaubst. <br><br><img src="bilder/hand.jpeg" width="250" alt="hand" />',
+    'dein lächeln ist wie sonnenlicht nach einem langen regen. <br><br><video src="videos/lächeln.mp4" autoplay loop muted playsinline width="200" alt="lächeln"</video>',
+    'du bringst einen zum lachen, egal wie scheiße es einem ging. <br><br><video src="videos/laune.mp4" autoplay loop playsinline width="200" alt="laune"</video>',
+    'in deiner nähe fühle ich mich immer geborgen und geliebt. <br><br><img src="bilder/geborgen.jpeg" width="250" alt="geborgen" />',
+    'du hast so ein großes herz und kümmerst dich immer um andere. <br><br><video src="videos/herz.mp4" autoplay loop playsinline width="200" alt="herz"</video>'
+  ],
+  hug: [
+    'fühl dich ganz warm umarmt baby. <br><br><img src="bilder/umarmung.jpeg" width="190" alt="umarmung" />',
+    'wenn ich jetzt bei dir wäre, würd ich dich einfach ganz doll festhalten. <br><br><video src="videos/kuscheln.mp4" autoplay loop muted playsinline width="250" alt="kuscheln"</video>',
+    'ich schicke dir eine riesige umarmung, die dich den ganzen tag begleitet. <br><br><img src="bilder/umarmung2.jpeg" width="250" alt="umarmung2" />',
+    'ich wünschte, ich könnte dich jetzt in meine arme nehmen. <br><br><video src="videos/kuscheln2.mp4" autoplay loop playsinline width="200" alt="kuscheln2"</video>',
+    'stell dir vor, ich halte dich ganz fest und lass dich nie wieder los. <br><br><video src="videos/festhalten.mp4" autoplay loop playsinline width="210" alt="festhalten" />'
+  ]
+};
+
+
+    // 🌞 Tagesnachrichten (ändern sich jeden Tag)
+    const dailyMessages = [
+      "du bist mein mensch 💫",
+      "egal, was heute passiert – ich liebe dich, genau so wie du bist 🫶",
+      "dein süßes lächeln rettet mein tag 🌸",
+      "vergiss nie: du bist genug baby. immer. 💖",
+      "du hast ein so wunderschönes herz baby. 💫",
+      "jeder tag mit dir ist ein geschenk ✨",
+      "du bist mein größtes abenteuer 💜",
+      "deine arme sind mein zu hause 🏡",
+      "du bist mein licht in dunklen zeiten 🌟",
+      "mit dir an meiner seite fühle ich mich unschlagbar 💥",
+      "deine liebe macht mich komplett 💞",
+      "du bist mein sonnenschein an grauen tagen ☀️",
+      "ich liebe dich mehr, als worte sagen können 💬",
+      "du bist mein lieblingsmensch auf der ganzen welt 🌍",
+      "ich liebe es dich zu lieben 💎",
+      "du bist mein herzschlag 💓",
+      "jeder moment mit dir ist magisch ✨",
+      "du bist mein traum, der wahr geworden ist 🌈",
+      "du bist mein ein und alles 💘",
+      "ich bin so dankbar, dich zu haben 🙏",
+      "du machst mein leben bunt und schön 🎨",
+      "du bist mein größtes glück 🍀",
+      "ich liebe dich bis zum mond und zurück 🌙",
+      "du bist meine beste freundin und meine große liebe 💕",
+      "mit dir fühle ich mich zuhause 🏠",
+      "du bist mein sicherer hafen in stürmischen zeiten ⛵",
+      "ich liebe dich mehr als gestern, aber weniger als morgen 💞",
+      "du bist mein größtes abenteuer 💫",
+      "jeder tag mit dir ist ein geschenk 🎁",
+      "du bist mein licht in der dunkelheit 🌟",
+      "ich liebe dich mehr, als worte ausdrücken können 💬",
+      "du bist mein ein und alles 💘"
+
+    ];
+
+    // Funktion zum Anzeigen einer Nachricht
+    const messageBox = document.getElementById("messageBox");
+
+    function showMessage(type) {
+      const randomMsg = messages[type][Math.floor(Math.random() * messages[type].length)];
+      messageBox.innerHTML = randomMsg;
+      messageBox.classList.remove("hidden");
+      messageBox.classList.add("fade-in");
+
+        // 🟢 Wenn das Video Ton haben soll → starte es nach Benutzerinteraktion manuell
+  const video = messageBox.querySelector("video");
+  if (video) {
+    video.play().catch(err => console.log("Autoplay blockiert:", err));
+  }
+    }
+
+    document.getElementById("loveBtn").addEventListener("click", () => showMessage("love"));
+    document.getElementById("youBtn").addEventListener("click", () => showMessage("you"));
+    document.getElementById("hugBtn").addEventListener("click", () => showMessage("hug"));
+
+    // 🌞 Tagesnachricht setzen
+    const today = new Date();
+    const dayIndex = today.getDate() % dailyMessages.length;
+    document.getElementById("dailyMessage").textContent = dailyMessages[dayIndex];
+
+    // 💖 Animierte Herzen erzeugen
+    const heartsContainer = document.getElementById("heartsContainer");
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (9 + Math.random() * 5) + "s";
+      heartsContainer.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    setInterval(createHeart, 500);
+  </script>
+</body>
+</html>
